@@ -12,39 +12,27 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(SpawnEnemyAtTime());
+        if (_spawnPoints.Count != 0)
+            StartCoroutine(SpawnEnemyAtTime());
     }
 
     private IEnumerator SpawnEnemyAtTime()
     {
+        WaitForSecondsRealtime wait = new WaitForSecondsRealtime(_spawnRate);
+
         while (isActiveAndEnabled)
         {
-            yield return new WaitForSecondsRealtime(_spawnRate);
-            SpawnEnemy();
+            yield return wait;
+
+            Enemy enemy = Instantiate
+                (
+                _enemyPrefab,
+                _spawnPoints[Random.Range(0, _spawnPoints.Count)].position,
+                Quaternion.identity
+                );
+
+            enemy.StartMove(GenerateRandomRoute());
         }
-    }
-
-    private void SpawnEnemy()
-    {
-        if (TryGetRandomSpawnpoint(out Transform spawnpoint))
-        {
-            Enemy enemy = Instantiate(_enemyPrefab, spawnpoint.position, Quaternion.identity);
-            enemy.Initialize(GenerateRandomRoute());
-
-            return;
-        }
-    }
-
-    private bool TryGetRandomSpawnpoint(out Transform spawnpoint)
-    {
-        if (_spawnPoints.Count == 0)
-        {
-            spawnpoint = null;
-            return false;
-        }
-
-        spawnpoint = _spawnPoints[Random.Range(0, _spawnPoints.Count)];
-        return true;
     }
 
     private Vector3 GenerateRandomRoute()

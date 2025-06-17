@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
         _mover = GetComponent<Mover>();
     }
 
-    public void Initialize(Vector3 route)
+    public void StartMove(Vector3 route)
     {
         _mover.StartMove(route, _speed);
     }
