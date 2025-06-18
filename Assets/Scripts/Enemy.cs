@@ -1,19 +1,15 @@
-using UnityEngine;
-
-[RequireComponent(typeof(Mover), typeof(Rigidbody))]
-public class Enemy : MonoBehaviour
+public class Enemy : MovingEntity
 {
-    [SerializeField] private float _speed;
+    private EnemyTarget _enemyTarget;
 
-    private Mover _mover;
-
-    private void Awake()
+    public void StartMoveToTarget(EnemyTarget target)
     {
-        _mover = GetComponent<Mover>();
+        _enemyTarget = target;
+        Move();
     }
 
-    public void StartMove(Vector3 route)
+    protected override void Move()
     {
-        _mover.StartMove(route, _speed);
+        Mover.StartMove(_enemyTarget.transform, Speed);
     }
 }

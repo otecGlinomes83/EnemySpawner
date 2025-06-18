@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private Enemy _enemyPrefab;
-    [SerializeField] private List<Transform> _spawnPoints;
+    [SerializeField] private List<SpawnPoint> _spawnPoints;
 
     private float _spawnRate = 2f;
 
@@ -24,27 +23,7 @@ public class Spawner : MonoBehaviour
         {
             yield return wait;
 
-            Enemy enemy = Instantiate
-                (
-                _enemyPrefab,
-                _spawnPoints[Random.Range(0, _spawnPoints.Count)].position,
-                Quaternion.identity
-                );
-
-            enemy.StartMove(GenerateRandomRoute());
+            _spawnPoints[Random.Range(0, _spawnPoints.Count)].Spawn();
         }
-    }
-
-    private Vector3 GenerateRandomRoute()
-    {
-        List<Vector3> routes = new List<Vector3>
-        {
-            Vector3.forward,
-            Vector3.back,
-            Vector3.right,
-            Vector3.left
-        };
-
-        return routes[Random.Range(0, routes.Count)];
     }
 }
